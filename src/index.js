@@ -1,7 +1,7 @@
 import './pages/index.css';
 import { 
   // initialCards, 
-  createCard, deleteCardCallback, toggleLikeCallback } from './components/card.js';
+  createCard, deleteCardCallback, toggleLikeCallback } from './components/cards.js';
 import { openPopup, closePopup, closeByClick } from './components/modal.js';
 import { enableValidation, clearValidation, hideInputError, toggleButtonState, validationConfig } from './components/validation.js';
 
@@ -176,3 +176,5 @@ enableValidation(validationConfig);
 
 // Вызов функции очистки ошибок валидации 
 clearValidation(popupEditProfile, validationConfig); 
+
+export { cardTemplate };

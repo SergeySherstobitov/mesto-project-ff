@@ -13,8 +13,8 @@ function createCard(cardContent, deleteCardCallback, toggleLikeCallback, openIma
   const deleteButton = cardElement.querySelector('.card__delete-button');
   deleteButton.addEventListener('click', () => deleteCardCallback(cardElement))
 
-  // const likeButton = cardElement.querySelector('.card__like-button');
-  // likeButton.addEventListener('click', () => toggleLikeCallback(likeButton));
+  const likeButton = cardElement.querySelector('.card__like-button');
+  likeButton.addEventListener('click', () => toggleLikeCallback(likeButton));
 
   const buttonImage = cardElement.querySelector('.card__image');
   buttonImage.addEventListener('click', () => openImagePopupCallback(buttonImage));
