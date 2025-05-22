@@ -33,4 +33,5 @@ if (event.target === activePopup || event.target.classList.contains('popup__clos
 }
 }
 
-export { openPopup, closePopup, closeByClick };
+
+export { openPopup, closePopup, closeByClick, closeByEsc };
