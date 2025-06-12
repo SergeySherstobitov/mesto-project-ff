@@ -1,4 +1,3 @@
-
 const initialCards = [
   {
     name: "Архыз",
@@ -31,6 +30,5 @@ const initialCards = [
     alt: "Изображение скалистого берега темного цвета на фоне замерзшего озера Байкал",
   },
 ];
-
 
 export { initialCards };

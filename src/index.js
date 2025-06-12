@@ -1,11 +1,6 @@
 import "./pages/index.css";
-import {
-  createCard,
-  renderCard,
-  deleteCard,
-} from "./components/card.js";
-import {
-  initialCards } from "./components/cards.js";
+import { createCard, renderCard, deleteCard } from "./components/card.js";
+import { initialCards } from "./components/cards.js";
 import {
   openPopup,
   closePopup,
@@ -22,7 +17,9 @@ const urlInput = document.querySelector(".popup__input_type_url");
 const popupAddNewCard = document.querySelector(".popup_type_new-card");
 const popupEditProfile = document.querySelector(".popup_type_edit");
 const popupFullImage = document.querySelector(".popup_type_image");
-const buttonOpenPopupAddNewCard = document.querySelector(".profile__add-button");
+const buttonOpenPopupAddNewCard = document.querySelector(
+  ".profile__add-button"
+);
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const formElementEdit = document.querySelector(".popup_type_edit");
 const nameInput = document.querySelector(".popup__input_type_name");
@@ -39,7 +36,7 @@ buttonOpenPopupAddNewCard.addEventListener("click", () => {
   openPopup(popupAddNewCard);
 });
 
-buttonEditProfile .addEventListener("click", () => {
+buttonEditProfile.addEventListener("click", () => {
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
   openPopup(popupEditProfile);
@@ -47,7 +44,7 @@ buttonEditProfile .addEventListener("click", () => {
 
 formElementEdit.addEventListener("submit", handleFormEditProfileSubmit);
 
-function  handleFormEditProfileSubmit(evt) {
+function handleFormEditProfileSubmit(evt) {
   evt.preventDefault();
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
@@ -65,7 +62,7 @@ function handleFormElementNewCardSubmit(evt) {
   };
 
   renderCard(newCard); // Добавление в начало
-  closePopup(popupNewPlace); // Закрытие попапа
+  closePopup(popupAddNewCard); // Закрытие попапа
   evt.target.reset(); // Очистка формы
 }
 
