@@ -1,17 +1,10 @@
-import { cardTemplate } from "../index.js";
-import { openPopup } from "./modal.js";
-// дом узлы
-const cardList = document.querySelector(".places__list");
-const popupImage = document.querySelector(".popup_type_image");
-const imageLink = popupImage.querySelector(".popup__image");
-const imageAlt = popupImage.querySelector(".popup__caption");
-
 function createCard(
   card,
   deleteCard,
   toggleLikeCallback,
   openImagePopupCallback
 ) {
+  const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
@@ -26,16 +19,6 @@ function createCard(
   return cardElement;
 }
 
-function renderCard(card) {
-  const cardElement = createCard(
-    card,
-    deleteCard,
-    toggleLikeCallback,
-    openImagePopupCallback
-  );
-  cardList.prepend(cardElement);
-}
-
 function deleteCard(cardElement) {
   cardElement.remove();
 }
@@ -44,13 +27,4 @@ function deleteCard(cardElement) {
 function toggleLikeCallback(likeButton) {
   likeButton.classList.toggle("card__like-button_is-active");
 }
-
-function openImagePopupCallback(card) {
-  imageLink.src = card.link;
-  imageLink.alt = card.alt;
-  imageAlt.textContent = card.name;
-
-  openPopup(popupImage);
-}
-
-export { createCard, renderCard, deleteCard };
+export { createCard, deleteCard, toggleLikeCallback };

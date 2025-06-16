@@ -2,14 +2,14 @@
 function openPopup(popup) {
   popup.classList.add("popup_is-opened");
   document.addEventListener("keydown", closeByEsc);
-  popup.addEventListener("click", closeByClick);
+  popup.addEventListener("click", closeClickByOverlay);
 }
 
 // Функция закрытия попапов
 function closePopup(popup) {
   popup.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", closeByEsc);
-  popup.removeEventListener("click", closeByClick);
+  popup.removeEventListener("click", closeClickByOverlay);
 }
 
 // Обработчик закрытия по Escape
@@ -22,7 +22,7 @@ function closeByEsc(event) {
   }
 }
 // Обработчик закрытия по клику на оверлей или кнопку закрытия
-function closeByClick(event) {
+function closeClickByOverlay(event) {
   const activePopup = event.target.closest(".popup_is-opened");
   if (
     event.target === activePopup ||
@@ -32,4 +32,4 @@ function closeByClick(event) {
   }
 }
 
-export { openPopup, closePopup, closeByClick, closeByEsc };
+export { openPopup, closePopup, closeClickByOverlay, closeByEsc };
