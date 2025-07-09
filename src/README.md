@@ -1,3 +1,3 @@
 # Проектная работа Mesto
 
-https://github.com/SergeySherstobitov/mesto-project-ff.git
+https://SergeySherstobitov.github.io/mesto-project-ff

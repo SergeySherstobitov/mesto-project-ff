@@ -29,3 +29,22 @@
   visibility: visible;
   pointer-events: all;
 }
+
+.popup__error {
+  display: none;
+  color: red;
+  font-size: 12px;
+}
+
+.popup__error_visible {
+  display: block;
+}
+
+.popup__input_type_error {
+  border-color: red;
+}
+
+.popup__button_disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
