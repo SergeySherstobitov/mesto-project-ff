@@ -1,13 +1,10 @@
 import "./pages/index.css";
 import { createCard } from "./components/card.js";
 import { openPopup, closePopup } from "./components/modal.js";
-import {
-  enableValidation,
-  validationConfig,
-  clearValidation,
-} from "./components/validation.js";
+import { enableValidation, clearValidation } from "./components/validation.js";
 import {
   addNewCard,
+  deleteCard,
   getUserData,
   getCards,
   toggleLike,
@@ -46,6 +43,43 @@ const profileAvatar = document.querySelector("#profile-avatar");
 const formAvatar = document.querySelector("#avatar-form");
 const avatarInput = document.querySelector("#avatar-url");
 const popupAvatar = document.querySelector("#avatar-popup");
+const deletePopup = document.getElementById("delete-popup");
+const confirmDeleteButton = document.getElementById("confirmDeleteButton");
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+// Включаем валидацию
+enableValidation(validationConfig);
+
+confirmDeleteButton.addEventListener("click", () => {
+  const button = confirmDeleteButton;
+  renderLoading(true, button, "Да", "Удаление...");
+
+  const cardId = window.currentCardId;
+  const cardElement = window.currentCardElement;
+
+  if (!cardId || !cardElement) {
+    console.error("❌ Нет данных для удаления");
+    return;
+  }
+
+  deleteCard(cardId)
+    .then(() => {
+      cardElement.remove();
+      closePopup(deletePopup);
+    })
+    .catch((err) => {
+      console.error("Ошибка при удалении карточки:", err);
+    })
+    .finally(() => {
+      renderLoading(false, button, "Да");
+    });
+});
 
 profileAvatar.addEventListener("click", () => {
   openPopup(popupAvatar);
@@ -62,21 +96,16 @@ function renderLoading(
   if (!buttonElement) return;
   buttonElement.textContent = isLoading ? loadingText : defaultText;
 }
-// Включаем валидацию
-enableValidation(validationConfig);
 
 // Отрисовка карточек
 function renderCards(cards, userId) {
-  while (cardList.firstChild) {
-    cardList.removeChild(cardList.firstChild);
-  }
-
   cards.forEach((card) => {
     const cardElement = createCard(
       card,
       toggleLike,
       openImagePopupCallback,
-      userId
+      userId,
+      openDeletePopup // если используется
     );
     cardList.append(cardElement);
   });
@@ -120,15 +149,15 @@ function renderCard(card, userId) {
     card,
     toggleLike,
     openImagePopupCallback,
-    userId
+    userId,
+    openDeletePopup
   );
   cardList.prepend(cardElement);
 }
 
 // Обработчик открытия попапа добавления карточки
 buttonOpenPopupAddNewCard.addEventListener("click", () => {
-  cardInput.value = "";
-  urlInput.value = "";
+  formElementNewCard.reset(); // ✅
   openPopup(popupAddNewCard);
   clearValidation(formElementNewCard, validationConfig);
 });
@@ -187,3 +216,16 @@ formAvatar.addEventListener("submit", (evt) => {
     .catch((err) => console.error("Ошибка обновления аватара:", err))
     .finally(() => renderLoading(false, button, "Сохранить"));
 });
+
+function openDeletePopup(cardId, cardElement) {
+  if (!cardElement) {
+    console.error("❌ Ошибка: переданный элемент карточки равен null!");
+    return;
+  }
+
+  window.currentCardId = cardId;
+  window.currentCardElement = cardElement;
+
+  const deletePopup = document.getElementById("delete-popup");
+  openPopup(deletePopup);
+}

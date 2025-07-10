@@ -1,33 +1,28 @@
 const API_URL = "https://nomoreparties.co/v1/wff-cohort-41";
 const token = "6ebf5ed5-3d41-418f-9e87-d9ea42a4528a";
-const request = (url, options) =>
-  fetch(url, {
+
+// Универсальный метод запроса
+const request = (url, options = {}) => {
+  return fetch(url, {
     headers: {
-      Authorization: TOKEN,
+      Authorization: token,
       "Content-Type": "application/json",
+      ...options.headers,
     },
     ...options,
-  }).then((res) => (res.ok ? res.json() : Promise.reject(res.status)));
+  }).then((res) =>
+    res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
+  );
+};
 
-// Загрузка профиля
+// Получение данных пользователя
 export function fetchUserProfile() {
-  return request(`${API_URL}/users/me`) // Отправляем GET-запрос
-    .then((data) => {
-      console.log("Данные пользователя получены:", data);
-      return data; //объект с ID и именем пользователя
-    })
-    .catch((err) => {
-      console.error("Ошибка загрузки профиля:", err);
-      throw err;
-    });
+  return request(`${API_URL}/users/me`);
 }
 
 // Загрузка карточек
 export function fetchCards() {
-  return request(`${API_URL}/cards`).catch((err) => {
-    console.error("Ошибка загрузки карточек:", err);
-    return [];
-  });
+  return request(`${API_URL}/cards`);
 }
 
 // Обновление профиля
@@ -35,9 +30,6 @@ export function updateUserProfile(name, about) {
   return request(`${API_URL}/users/me`, {
     method: "PATCH",
     body: JSON.stringify({ name, about }),
-  }).catch((err) => {
-    console.error("Ошибка обновления профиля:", err);
-    return {};
   });
 }
 
@@ -46,23 +38,17 @@ export function addNewCard(name, link) {
   return request(`${API_URL}/cards`, {
     method: "POST",
     body: JSON.stringify({ name, link }),
-  }).catch((err) => {
-    console.error("Ошибка добавления карточки:", err);
-    return null;
   });
 }
 
 // Удаление карточки
 export function deleteCard(cardId) {
-  return request(`${API_URL}/cards/${cardId}`, { method: "DELETE" }).catch(
-    (err) => {
-      console.error("Ошибка удаления карточки:", err);
-      throw err;
-    }
-  );
+  return request(`${API_URL}/cards/${cardId}`, {
+    method: "DELETE",
+  });
 }
 
-// Лайк карточки
+// Лайк/дизлайк карточки
 export function toggleLike(cardId, isLiked) {
   return request(`${API_URL}/cards/likes/${cardId}`, {
     method: isLiked ? "DELETE" : "PUT",
@@ -71,67 +57,12 @@ export function toggleLike(cardId, isLiked) {
 
 // Обновление аватара
 export function updateAvatar(avatarUrl) {
-  console.warn("Функция updateAvatar вызвана с URL:", avatarUrl);
-
   return request(`${API_URL}/users/me/avatar`, {
     method: "PATCH",
     body: JSON.stringify({ avatar: avatarUrl }),
-  })
-    .then((data) => {
-      console.log("Аватар обновлён:", data);
-      return data;
-    })
-    .catch((err) => {
-      console.error("Ошибка обновления аватара:", err);
-      alert(
-        "Ошибка обновления аватара: " + (err.message || "Неизвестная ошибка")
-      );
-      throw err;
-    });
-}
-
-// Функция для запроса данных пользователя
-export function getUserData() {
-  return fetch(`${API_URL}/users/me`, {
-    method: "GET",
-    headers: {
-      Authorization: token,
-      "Content-Type": "application/json",
-    },
-  }).then((res) =>
-    res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-  );
-}
-
-// Функция для запроса карточек
-export function getCards() {
-  return fetch(`${API_URL}/cards`, {
-    method: "GET",
-    headers: {
-      Authorization: token,
-      "Content-Type": "application/json",
-    },
-  }).then((res) =>
-    res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-  );
-}
-
-export function editingProfileApi(name, about) {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-41/users/me`, {
-    method: "PATCH",
-    headers: {
-      Authorization: token,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: name.trim(), //  лишние пробелы
-      about: about.trim(),
-    }),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(`Ошибка: ${res.status}`);
-    }
   });
 }
+
+export const getUserData = fetchUserProfile;
+export const getCards = fetchCards;
+export const editingProfileApi = updateUserProfile;
