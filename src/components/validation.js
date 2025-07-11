@@ -13,16 +13,17 @@ function hideInputError(formElement, inputElement, config) {
 }
 
 function isValid(formElement, inputElement, config) {
+  // Сначала сброс кастомного сообщения, чтобы не мешало встроенному
+  inputElement.setCustomValidity("");
+
   if (!inputElement.validity.valid) {
-    // Установка кастомного сообщения
-    if (inputElement.validity.valueMissing) {
-      inputElement.setCustomValidity("Это поле обязательно для заполнения");
-    } else if (inputElement.validity.typeMismatch) {
-      inputElement.setCustomValidity("Введите URL");
-    } else {
-      inputElement.setCustomValidity("");
+    // Только если ошибка связана с pattern — задаём кастомное
+    if (inputElement.validity.patternMismatch) {
+      const customMessage = inputElement.dataset.errorMessage;
+      inputElement.setCustomValidity(customMessage || "Неверный формат");
     }
 
+    // Показываем ошибку (будь то кастомное или встроенное сообщение)
     showInputError(
       formElement,
       inputElement,
@@ -30,7 +31,6 @@ function isValid(formElement, inputElement, config) {
       config
     );
   } else {
-    inputElement.setCustomValidity("");
     hideInputError(formElement, inputElement, config);
   }
 }
@@ -87,5 +87,5 @@ export function clearValidation(formElement, config) {
     hideInputError(formElement, inputElement, config);
   });
 
-  disableSubmitButton(buttonElement, config); // Переиспользуем функцию
+  toggleButtonState(inputList, buttonElement, config);
 }

@@ -1,13 +1,11 @@
 function openPopup(popup) {
   popup.classList.add("popup_is-opened");
   document.addEventListener("keydown", closeByEsc);
-  popup.addEventListener("mousedown", closeByOverlay);
 }
 
 function closePopup(popup) {
   popup.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", closeByEsc);
-  popup.removeEventListener("mousedown", closeByOverlay);
 }
 
 function closeByEsc(evt) {
@@ -18,7 +16,8 @@ function closeByEsc(evt) {
 }
 
 function closeByOverlay(evt) {
-  const popup = evt.currentTarget;
+  const popup = evt.target.closest(".popup");
+  if (!popup) return;
 
   const isOverlayClick = evt.target === popup;
   const isCloseButtonClick = evt.target.classList.contains("popup__close");
@@ -27,5 +26,8 @@ function closeByOverlay(evt) {
     closePopup(popup);
   }
 }
+
+// Глобальный обработчик
+document.addEventListener("mousedown", closeByOverlay);
 
 export { openPopup, closePopup };

@@ -157,18 +157,21 @@ function renderCard(card, userId) {
 
 // Обработчик открытия попапа добавления карточки
 buttonOpenPopupAddNewCard.addEventListener("click", () => {
-  formElementNewCard.reset(); // ✅
+  formElementNewCard.reset(); 
+  clearValidation(formElementNewCard, validationConfig); 
   openPopup(popupAddNewCard);
-  clearValidation(formElementNewCard, validationConfig);
 });
+
 
 // Обработчик открытия попапа редактирования профиля
 buttonEditProfile.addEventListener("click", () => {
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
+
+  clearValidation(formElementEdit, validationConfig); 
   openPopup(popupEditProfile);
-  clearValidation(formElementEdit, validationConfig);
 });
+
 
 // Обработчик отправки новой карточки
 formElementNewCard.addEventListener("submit", (evt) => {
